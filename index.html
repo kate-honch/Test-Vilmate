@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>task</title>
+</head>
+<body>
+</body>
+<script>
+    window.onload = function() {
+        const body = document.querySelector('body');
+
+        let count = 0;
+        let countId = 0;
+
+        function addDivs (wrapper, num) {
+            for(let i=0; i < num; i++) {
+                wrapper.insertAdjacentHTML('beforeend', `<div id=${++countId} class="block">div${++count}</div>`);
+            }
+        };
+
+        addDivs(body, 100);
+
+        const divs = document.querySelectorAll('.block');
+        let arrFromDivs = Array.from(divs);
+        let currentArr = [];
+
+        arrFromDivs.forEach(div => {
+            currentArr.push(div.id);
+
+            div.addEventListener('click', () => {
+                if(div.classList.contains('active')) {
+                    div.classList.remove('active');
+                    let currentId = div.id;
+                    const indexNum = currentArr.findIndex((el) => currentId < el);
+                    //if indexNum === -1 push in end array
+                    if(indexNum === -1) {
+                        currentArr.push(currentId);
+                    } else {
+                        currentArr.splice(indexNum, 0, currentId);
+                    }
+                    const nextDivId = +currentId + 1;
+                    const nextDiv = document.getElementById(nextDivId);
+                    body.insertBefore(div, nextDiv);
+                    // console.log('remove')
+                } else {
+                    div.classList.add('active');
+                    body.prepend(div);
+                    currentArr = currentArr.filter(el => el !== div.id);
+                    // console.log('add');
+                }
+            })
+        });
+    }
+</script>
+
+<style>
+    .block {
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        background-color: #ffe4c4c9;
+    }
+
+    .block:hover {
+        background-color: #ffe4c4;
+    }
+
+    .active {
+        background-color: rgb(187 228 243);
+    }
+
+    .active:hover {
+        background-color: #84cdf7;
+    }
+</style>
+</html>
